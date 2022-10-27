@@ -317,21 +317,6 @@ wait(void)
   }
 }
 
-// Helper function to get the highest priority process
-int getHighPriority() {
-    // Variable initializations
-    struct proc* p;
-    int priority = 0;
-
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) { // Loop through all processes
-      if (p->state == RUNNABLE && p->tickets == 1) { // If the process is runnable and has a priority of 1 
-        priority++;
-      }
-    }
-    
-    return priority;
-}
-
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -341,28 +326,35 @@ int getHighPriority() {
 //  - eventually that process transfers control
 //      via swtch back to the scheduler.
 void scheduler(void) {
-  // Variable initializations
   struct proc *p;
   struct cpu *c = mycpu();
   c->proc = 0;
-  
-  for(;;) {
+
+  for(;;) { // Infinite loop
     // Enable interrupts on this processor.
     sti();
-    
-    // Variable declarations
+
+    // Variable initializations
     int highPriority = 0;
-    int priority = getHighPriority();
+    struct proc* pr;
+    int priority = 0;
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    while (priority > 0) { // If there are high priority processes, run them first
-      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) { // loop over all processes
-        if(p->state != RUNNABLE) { // If the process is not runnable, skip it
+    
+    for(pr = ptable.proc; pr < &ptable.proc[NPROC]; pr++) { // Loop over process table
+      if (pr->state == RUNNABLE && pr->tickets == 1) { // If process is runnable and has 1 ticket
+        priority++;
+      }
+    }
+    while (priority > 0) { // While there are processes with 1 ticket
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) { // Loop over process table
+        if(p->state != RUNNABLE) { // If process is not runnable
           continue;
         }
-        if (p->tickets == 1) { // If the process is high priority, run it
+        if (p->tickets == 1) { // If process has 1 ticket
           highPriority = 1;
+
           // Switch to chosen process.  It is the process's job
           // to release ptable.lock and then reacquire it
           // before jumping back to us.
@@ -371,38 +363,43 @@ void scheduler(void) {
           p->state = RUNNING;
 
           p->ticks++;
-          
+
           swtch(&(c->scheduler), p->context);
           switchkvm();
 
           // Process is done running for now.
           // It should have changed its p->state before coming back.
           c->proc = 0;
-        } 
-      }
-      priority = getHighPriority();
-    }
-    if (highPriority == 0) { // If there are no high priority processes, run low priority processes
-      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) { // loop over all processes
-          if(p->state != RUNNABLE) { // If the process is not runnable, skip it
-            continue;
           }
+      }
+      struct proc* pr1; // Loop over process table
+      priority = 0; // Reset priority
+      for(pr1 = ptable.proc; pr1 < &ptable.proc[NPROC]; pr1++) { // Loop over process table
+        if (pr1->state == RUNNABLE && pr1->tickets == 1) { // If process is runnable and has 1 ticket
+          priority++;
+        }
+      }
+    }
+    if (highPriority == 0) { // If there are no processes with 1 ticket
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) { // Loop over process table
+        if(p->state != RUNNABLE) { // If process is not runnable
+          continue;
+        }
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
 
-          c->proc = p;
-          switchuvm(p);
-          p->state = RUNNING;
+        p->ticks++;
 
-          p->ticks++;
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
 
-          swtch(&(c->scheduler), p->context);
-          switchkvm();
-          
-          c->proc = 0;
-
-          break;
-      }  
-    }  
-    release(&ptable.lock); // Release the lock
+        c->proc = 0;
+        
+        break;
+      }
+    }
+    release(&ptable.lock);
   }
 }
 
