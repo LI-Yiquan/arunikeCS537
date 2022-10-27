@@ -1,4 +1,0 @@
-Name: Richie Zhou
-Email: zhou469@wisc.edu
-
-What I have done for this project is adding a do_mult_delta to memcached.c to do the multiplication and division in the memcached.c,process_arithmeticm_command to proto_text.c to detect any form of error. mult_delta and to thread.c to do arithmetic on a numeric item value, do_mult_delta and mult_delta to memcached.h to call the functions. After all of the functions are written, we will be able to run mult to do multiplication and div to do division.
