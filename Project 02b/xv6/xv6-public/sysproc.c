@@ -114,31 +114,28 @@ int sys_settickets(void) {
     return settickets(number); 
 }
 
-// Read only system call
 int sys_mprotect(void) {
-    // Variable declarations 
     int addr;
     int len;
 
-    if(argint(0, &addr) < 0) { // Get address
+    if(argint(0, &addr) < 0) {
         return -1;
     }
-    if(argint(1, &len) < 0) { // Get length
+    if(argint(1, &len) < 0) {
         return -1;
     }
 
     return mprotect((void *)addr,  len);
 }
 
-// Read and write only system call
 int sys_munprotect(void) {
     int addr;
     int len;
 
-    if(argint(0, &addr) < 0) { // Get the address of the page
+    if(argint(0, &addr) < 0) {
         return -1;
     }
-    if(argint(1, &len) < 0) { // Get the length of the page
+    if(argint(1, &len) < 0) {
         return -1;
     }
 

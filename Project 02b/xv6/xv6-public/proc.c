@@ -334,25 +334,23 @@ void scheduler(void) {
     // Enable interrupts on this processor.
     sti();
 
-    // Variable initializations
     int highPriority = 0;
     struct proc* pr;
     int priority = 0;
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    
-    for(pr = ptable.proc; pr < &ptable.proc[NPROC]; pr++) { // Loop over process table
-      if (pr->state == RUNNABLE && pr->tickets == 1) { // If process is runnable and has 1 ticket
+    for(pr = ptable.proc; pr < &ptable.proc[NPROC]; pr++) {
+      if (pr->state == RUNNABLE && pr->tickets == 1) {
         priority++;
       }
     }
-    while (priority > 0) { // While there are processes with 1 ticket
-      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) { // Loop over process table
-        if(p->state != RUNNABLE) { // If process is not runnable
+    while (priority > 0) {
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+        if(p->state != RUNNABLE) {
           continue;
         }
-        if (p->tickets == 1) { // If process has 1 ticket
+        if (p->tickets == 1) {
           highPriority = 1;
 
           // Switch to chosen process.  It is the process's job
@@ -372,17 +370,19 @@ void scheduler(void) {
           c->proc = 0;
           }
       }
-      struct proc* pr1; // Loop over process table
-      priority = 0; // Reset priority
-      for(pr1 = ptable.proc; pr1 < &ptable.proc[NPROC]; pr1++) { // Loop over process table
-        if (pr1->state == RUNNABLE && pr1->tickets == 1) { // If process is runnable and has 1 ticket
+
+      struct proc* pr1;
+      priority = 0;
+
+      for(pr1 = ptable.proc; pr1 < &ptable.proc[NPROC]; pr1++) {
+        if (pr1->state == RUNNABLE && pr1->tickets == 1) {
           priority++;
         }
       }
     }
-    if (highPriority == 0) { // If there are no processes with 1 ticket
-      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) { // Loop over process table
-        if(p->state != RUNNABLE) { // If process is not runnable
+    if (highPriority == 0) {
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+        if(p->state != RUNNABLE) {
           continue;
         }
         c->proc = p;
@@ -581,13 +581,11 @@ procdump(void)
   }
 }
 
-// getpinfo to get information for process
 int getpinfo(struct pstat *ps) {
-    // Variable initializations
     struct proc *curr;
     acquire(&ptable.lock);
 
-    for (int i = 0; i < NPROC; i++) { // Loop through all processes
+    for (int i = 0; i < NPROC; i++) {
         curr = &ptable.proc[i];
         ps -> pid[i] = curr -> pid;
         ps -> tickets[i] = curr -> tickets;
@@ -598,18 +596,17 @@ int getpinfo(struct pstat *ps) {
             ps->inuse[i] = 1;
         }
     }
-    release(&ptable.lock); // Release lock
+    release(&ptable.lock);
     
     return 0;
 }
 
-// settickets to set tickets for a process
-int settickets(int number) { // set tickets for a process
-  if(number != 0 && number != 1)  { // if number is not 0 or 1
+int settickets(int number) {
+  if(number != 0 && number != 1)  {
     return -1;
   }
-  struct proc *p = myproc(); // get current process
-  p -> tickets = number; // set tickets
+  struct proc *p = myproc();
+  p -> tickets = number;
   
   return 0;
 }
