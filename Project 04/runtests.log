@@ -1,0 +1,497 @@
+('starting', 'build')
+
+**********************************************************************
+
+Test build
+build project using make
+
+**********************************************************************
+Trying to build project using make
+make
+gcc -o mkfs mkfs.c -Wall
+gcc -o main main.c -Wall -L. -lmfs -g
+main.c: In function ‘main’:
+main.c:14:9: warning: variable ‘new_inum’ set but not used [-Wunused-but-set-variable]
+   14 |     int new_inum = MFS_Lookup(0,"testfile");
+      |         ^~~~~~~~
+./mkfs -f test.img
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+ldd main
+	linux-vdso.so.1 (0x00007fff87fe4000)
+	libmfs.so => ./libmfs.so (0x00007f79b1b64000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f79b191f000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f79b1b70000)
+
+
+test build PASSED
+ (build project using make)
+
+('starting', 'shutdown')
+
+**********************************************************************
+
+Test shutdown
+init server and client then call shutdown
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 7688
+/tmp/tmpOufIfR/p/server 7688 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 7688
+
+
+test shutdown PASSED
+ (init server and client then call shutdown)
+
+('starting', 'creat')
+
+**********************************************************************
+
+Test creat
+creat a file and check with lookup
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 8528
+/tmp/tmpOufIfR/p/server 8528 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 8528
+
+
+test creat PASSED
+ (creat a file and check with lookup)
+
+('starting', 'write')
+
+**********************************************************************
+
+Test write
+write then read one block
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 6386
+/tmp/tmpOufIfR/p/server 6386 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 6386
+('START BLOCK 1\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00', '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00END BLOCK 1')
+('START BLOCK 1\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00', '\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00END BLOCK 1')
+
+
+test write PASSED
+ (write then read one block)
+
+('starting', 'stat')
+
+**********************************************************************
+
+Test stat
+stat a regular file
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 5104
+/tmp/tmpOufIfR/p/server 5104 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 5104
+
+
+test stat PASSED
+ (stat a regular file)
+
+('starting', 'overwrite')
+
+**********************************************************************
+
+Test overwrite
+overwrite a block
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 9680
+/tmp/tmpOufIfR/p/server 9680 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 9680
+
+
+test overwrite PASSED
+ (overwrite a block)
+
+('starting', 'maxfile')
+
+**********************************************************************
+
+Test maxfile
+write largest possible file
+
+**********************************************************************
+total blocks        39
+  inodes            128 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 9366
+/tmp/tmpOufIfR/p/server 9366 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 9366
+
+
+test maxfile PASSED
+ (write largest possible file)
+
+('starting', 'maxfile2')
+
+**********************************************************************
+
+Test maxfile2
+write more blocks than possible
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 5498
+/tmp/tmpOufIfR/p/server 5498 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 5498
+31
+write more than need
+
+
+test maxfile2 PASSED
+ (write more blocks than possible)
+
+('starting', 'dir1')
+
+**********************************************************************
+
+Test dir1
+check root for dot entries
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 7247
+/tmp/tmpOufIfR/p/server 7247 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 7247
+
+
+test dir1 PASSED
+ (check root for dot entries)
+
+('starting', 'dir2')
+
+**********************************************************************
+
+Test dir2
+create a new directory and check it
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 7489
+/tmp/tmpOufIfR/p/server 7489 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 7489
+
+
+test dir2 PASSED
+ (create a new directory and check it)
+
+('starting', 'baddir')
+
+**********************************************************************
+
+Test baddir
+try to create a file with a file parent inode
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 6814
+/tmp/tmpOufIfR/p/server 6814 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 6814
+
+
+test baddir PASSED
+ (try to create a file with a file parent inode)
+
+('starting', 'baddir2')
+
+**********************************************************************
+
+Test baddir2
+try to lookup a file with a file parent inode
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 9741
+/tmp/tmpOufIfR/p/server 9741 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 9741
+
+
+test baddir2 PASSED
+ (try to lookup a file with a file parent inode)
+
+('starting', 'unlink')
+
+**********************************************************************
+
+Test unlink
+unlink a file
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 7522
+/tmp/tmpOufIfR/p/server 7522 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 7522
+
+
+test unlink PASSED
+ (unlink a file)
+
+('starting', 'unlink2')
+
+**********************************************************************
+
+Test unlink2
+unlink a directory
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 6886
+/tmp/tmpOufIfR/p/server 6886 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 6886
+
+
+test unlink2 PASSED
+ (unlink a directory)
+
+('starting', 'empty')
+
+**********************************************************************
+
+Test empty
+unlink a non-empty directory
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 9462
+/tmp/tmpOufIfR/p/server 9462 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 9462
+
+
+test empty PASSED
+ (unlink a non-empty directory)
+
+('starting', 'name')
+
+**********************************************************************
+
+Test name
+name too long
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 6666
+/tmp/tmpOufIfR/p/server 6666 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 6666
+
+
+test name PASSED
+ (name too long)
+
+('starting', 'persist')
+
+**********************************************************************
+
+Test persist
+restart server after creating a file
+
+**********************************************************************
+total blocks        36
+  inodes            32 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 9903
+/tmp/tmpOufIfR/p/server 9903 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 9903
+Starting server on port 9903
+/tmp/tmpOufIfR/p/server 9903 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 9903
+
+
+test persist PASSED
+ (restart server after creating a file)
+
+('starting', 'bigdir')
+
+**********************************************************************
+
+Test bigdir
+create a directory with 126 files
+
+**********************************************************************
+total blocks        39
+  inodes            128 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 7437
+/tmp/tmpOufIfR/p/server 7437 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 7437
+
+
+test bigdir PASSED
+ (create a directory with 126 files)
+
+('starting', 'deep')
+
+**********************************************************************
+
+Test deep
+create many deeply nested directories
+
+**********************************************************************
+total blocks        39
+  inodes            128 [size of each: 128]
+  data blocks       32
+layout details
+  inode bitmap address/len 1 [1]
+  data bitmap address/len  2 [1]
+Starting server on port 7337
+/tmp/tmpOufIfR/p/server 7337 /home/xinyun/private/cs537/p4/CS537_P4/test.img
+Good: 7337
+
+
+test deep PASSED
+ (create many deeply nested directories)
+
+**********************************************************************
+Summary:
+test build PASSED
+ (build project using make)
+
+test shutdown PASSED
+ (init server and client then call shutdown)
+
+test creat PASSED
+ (creat a file and check with lookup)
+
+test write PASSED
+ (write then read one block)
+
+test stat PASSED
+ (stat a regular file)
+
+test overwrite PASSED
+ (overwrite a block)
+
+test maxfile PASSED
+ (write largest possible file)
+
+test maxfile2 PASSED
+ (write more blocks than possible)
+
+test dir1 PASSED
+ (check root for dot entries)
+
+test dir2 PASSED
+ (create a new directory and check it)
+
+test baddir PASSED
+ (try to create a file with a file parent inode)
+
+test baddir2 PASSED
+ (try to lookup a file with a file parent inode)
+
+test unlink PASSED
+ (unlink a file)
+
+test unlink2 PASSED
+ (unlink a directory)
+
+test empty PASSED
+ (unlink a non-empty directory)
+
+test name PASSED
+ (name too long)
+
+test persist PASSED
+ (restart server after creating a file)
+
+test bigdir PASSED
+ (create a directory with 126 files)
+
+test deep PASSED
+ (create many deeply nested directories)
+
+Passed 19 of 19 tests.
+Overall 19 of 19
